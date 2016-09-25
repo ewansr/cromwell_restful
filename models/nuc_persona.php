@@ -5,14 +5,19 @@
  * Date: 23/09/2016
  * Time: 01:54 AM
  */
+require "utils/conexion.php";
+
 class nuc_persona{
     const TABLE_NAME = "nuc_persona";
     const ID     = "Id";
     const NOMBRE = "Nombre";
     const APPAT  = "Appat";
     const APMAT  = "Apmat";
+    const ESTADO_URL_INCORRECTA = "ERROR URL";
+    static $sentence = null;
 
     public static function post( $request ){
+        print($request[0]);
         if ( $request[0] == 'registro' ){
             return self::registrar();
         }else if ( $request[0] == 'login' ){
@@ -22,21 +27,21 @@ class nuc_persona{
         }
     }
 
-    private function getPersona($nombre)
+    private function getPersona()
     {
-        $comando = "SELECT " .
-            self::NOMBRE . "," .
-            self::APPAT . "," .
+        $SQLCommand = "SELECT " .
+            self::NOMBRE . ", " .
+            self::APPAT . ", " .
             self::APMAT . "" .
 
             " FROM " . self::TABLE_NAME ;
 
-        $sentencia = conexion::obtenerInstancia()->obtenerDB()->prepare($comando);
+        self::$sentence = conexion::obtenerInstancia()->obtenerDB()->prepare($SQLCommand);
 
-//        $sentencia->bindParam(1, $nombre);
+//        $sentence->bindParam(1, $nombre);
 
-        if ($sentencia->execute())
-            return $sentencia->fetch(PDO::FETCH_ASSOC);
+        if (self::$sentence->execute())
+            return self::$sentence->fetch(PDO::FETCH_ASSOC);
         else
             return null;
     }
@@ -44,30 +49,29 @@ class nuc_persona{
 
     private function loguear()
     {
-        $respuesta = array();
+        $response = array();
 
         $body = file_get_contents('php://input');
         $usuario = json_decode($body);
+        $data = self::getPersona();
 
-        $nombre = $usuario->nombre;
-
-
-
-        if (true) {
-            $usuarioBD = self::getPersona($nombre);
-
-            if ($usuarioBD != NULL) {
-                http_response_code(200);
-                $respuesta["nombre"] = $usuarioBD["nombre"];
-                return ["estado" => 1, "usuario" => $respuesta];
-            } else {
-                throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
-                    "Ha ocurrido un error");
-            }
+        if ($data != NULL) {
+            http_response_code(200);
+            //$response["Id"]  = $data["id"];
+            $response["Nombre"] = $data["Nombre"];
+            $response["Appat"]  = $data["Appat"];
+            $response["Apmat"]  = $data["Apmat"];
+            return [
+                    "Found" => true,
+                    "persona" => $response,
+                    "SQL" => self::$sentence
+                    ];
         } else {
-            throw new ExcepcionApi(self::ESTADO_PARAMETROS_INCORRECTOS,
-                utf8_encode("Correo o contraseña inválidos"));
+            return ["cuco" => 1, "usuario" => "cucoerror"];
+            throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
+                "Ha ocurrido un error");
         }
+       
     }
 
 }

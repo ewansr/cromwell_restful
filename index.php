@@ -14,43 +14,16 @@
  * La idea básica es usar una estructura switch para atender los cuatro verbos GET, POST, PUT y DELETE dependiendo del
  * segmento que llega a través de PATH_INFO. El algoritmo preciso sería el siguiente:
  */
+
+//require 'controladores/nuc_persona.php';
 require 'views/vistajson.php';
-require 'utils/conexion.php';
+require 'utils/apiexceptions.php';
 require 'models/nuc_persona.php';
 
-
-
-$req = $_GET['PATH_INFO'];
-
-$stack = array($req);
-$resource = array_shift($stack); // Here you give the parameter
-
-//      = array_shift( $request );
-print $resource;
-$all_resources = array('nuc_persona');
-
-//if ( !in_array($req, $all_resources) ){
-//    //Agregar respuesta de error
-//}
-
-$method = strtolower($_SERVER['REQUEST_METHOD']);
-
-switch ($method){
-    case 'get':
-        break;
-
-    case  'post':
-        $view->mprint(nuc_persona::post($req));
-        break;
-
-    case 'put':
-        break;
-
-    case 'delete':
-        break;
-
-    default:
-}
+// Constantes de estado
+const ESTADO_URL_INCORRECTA = 2;
+const ESTADO_EXISTENCIA_RECURSO = 3;
+const ESTADO_METODO_NO_PERMITIDO = 4;
 
 $view = new vistajson();
 
@@ -67,4 +40,42 @@ set_exception_handler(function ( $exception ) use ($view){
     }
     $view->mprint( $body );
 });
+
+// Extraer segmento de la url
+if (isset($_GET['PATH_INFO'])) {
+    $request = explode('/', $_GET['PATH_INFO']);
+    //print($request[0]);
+}
+else
+    throw new apiexceptions(ESTADO_URL_INCORRECTA, utf8_encode("No se reconoce la petición"));
+
+// Obtener recurso
+$resource = array_shift($request);
+$resource_available = array('nuc_persona');
+
+// Comprobar si existe el recurso
+if (!in_array($resource, $resource_available)) {
+    throw new apiexceptions(ESTADO_EXISTENCIA_RECURSO,
+        "No se reconoce el recurso al que intentas acceder");
+}
+
+$method = strtolower($_SERVER['REQUEST_METHOD']);
+
+switch ($method){
+    case 'get':
+        break;
+
+    case  'post':
+        $view->mprint(nuc_persona::post($request));
+        break;
+
+    case 'put':
+        break;
+
+    case 'delete':
+        break;
+
+    default:
+}
+
 
