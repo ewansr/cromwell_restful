@@ -42,21 +42,26 @@ class usuarios extends master_usuarios{
             $data = self::$sentence->fetch(PDO::FETCH_ASSOC);
             if ($data != NULL) {
                 http_response_code(200);
-//                while ($fila = mysql_fetch_array($data, MYSQL_NUM)) {
-                    $response[self::ID] = $data[self::ID];
-                    $response[self::IDPERSONAL] = $data[self::IDPERSONAL];
-                    $response[self::USUARIO] = $data[self::USUARIO];
-                    $response[self::CONTRASENA_DECRYPT] = $data[self::CONTRASENA_DECRYPT];
-                    $response[self::COMENTARIOS] = $data[self::COMENTARIOS];
-                    $response[self::EDITABLE] = $data[self::EDITABLE];
-                    $response[self::IDPERFIL] = $data[self::IDPERFIL];
-                    $response[self::ACTIVO] = $data[self::ACTIVO];
+                $row = $data;
+//                $jsonData = array();
+//                while ($row = mysql_fetch_row(self::$sentence)) {
+
+                    $response[self::ID] = $row[self::ID];
+                    $response[self::IDPERSONAL] = $row[self::IDPERSONAL];
+                    $response[self::USUARIO] = $row[self::USUARIO];
+                    $response[self::CONTRASENA_DECRYPT] = $row[self::CONTRASENA_DECRYPT];
+                    $response[self::COMENTARIOS] = $row[self::COMENTARIOS];
+                    $response[self::EDITABLE] = $row[self::EDITABLE];
+                    $response[self::IDPERFIL] = $row[self::IDPERFIL];
+                    $response[self::ACTIVO] = $row[self::ACTIVO];
+//                    $jsonData = $row;
+//                }
                     return [
                         "Found" => true,
                         SELF::TABLE_NAME => $response,
                         "SQL" => self::$sentence
                     ];
-//                }
+
             } else {
                 return ["Found" => False, "usuario" => "Usuario no encontrado"];
                 throw new ExcepcionApi(self::ESTADO_FALLA_DESCONOCIDA,
