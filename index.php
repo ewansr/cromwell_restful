@@ -16,6 +16,7 @@
  */
 
 //require 'controladores/nuc_persona.php';
+require 'controllers/usuarios.php';
 require 'views/vistajson.php';
 require 'utils/apiexceptions.php';
 require 'models/nuc_persona.php';
@@ -51,7 +52,7 @@ else
 
 // Obtener recurso
 $resource = array_shift($request);
-$resource_available = array('nuc_persona');
+$resource_available = array('nuc_persona', 'usuarios');
 
 // Comprobar si existe el recurso
 if (!in_array($resource, $resource_available)) {
@@ -63,10 +64,14 @@ $method = strtolower($_SERVER['REQUEST_METHOD']);
 
 switch ($method){
     case 'get':
+        $response = call_user_func(array($resource, $method), $request);
+        $view->mprint($response);
         break;
 
     case  'post':
-        $view->mprint(nuc_persona::post($request));
+        //$view->mprint(nuc_persona::post($request));
+        $response = call_user_func(array($resource, $method), $request);
+        $view->mprint($response);
         break;
 
     case 'put':

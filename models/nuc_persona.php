@@ -17,7 +17,6 @@ class nuc_persona{
     static $sentence = null;
 
     public static function post( $request ){
-        print($request[0]);
         if ( $request[0] == 'registro' ){
             return self::registrar();
         }else if ( $request[0] == 'login' ){

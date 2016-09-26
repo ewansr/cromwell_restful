@@ -10,8 +10,8 @@
  * Provee las constates para conectarse a la base de datos
  */
 
-define("NOMBRE_HOST", "localhost");
-define("BASE_DATOS", "prueba");
+define("NOMBRE_HOST", "104.236.201.168");
+define("BASE_DATOS", "Mizton");
 define("USUARIO", "root");
 define("CONTRASENA", "danae");
 
