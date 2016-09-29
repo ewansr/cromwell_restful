@@ -20,6 +20,7 @@
      const IDPERFIL = "IdPerfil";
      const ACTIVO = "Activo";
      const ESTADO_URL_INCORRECTA = "ERROR URL";
+     const ESTADO_FALLA_DESCONOCIDA = "FALLA DESCONOCIDA";
      static $sentence = null;
 
      public abstract function post($request);
