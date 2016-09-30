@@ -87,16 +87,18 @@ class usuarios extends master_usuarios{
 
         if (self::autenticar($correo, $contrasena)) {
             try {
+                http_response_code(204);
                 $usuarioBD = self::obtenerUsuarioPorCorreo($correo);
                 if ($usuarioBD != NULL) {
                     http_response_code(200);
                     $respuesta[self::ID] = $usuarioBD[self::ID];
                     $respuesta[self::USUARIO] = $usuarioBD[self::USUARIO];
-                    return ["logueo_valido" => 1,
+                    return ["state" => 200,"logueo_valido" => 1,
                             "valid" => 1,
                             "message" => "Logueo Exitoso",
                             self::TABLE_NAME => $respuesta];
                 } else {
+
                     return ["logueo_valido" => 0,
                             "message" => "Usuario o contraseña inválidos",
                             self::TABLE_NAME => $respuesta];

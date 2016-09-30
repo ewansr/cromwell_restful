@@ -40,14 +40,7 @@ class ordenes_trabajo extends mt_foliosxtecnicos{
             " (Select Count(*) from mt_foliosxtecnicos where DATE(fechacreacion) =  DATE(NOW()) and estatus = 'Objetada') as objetadas,".
             " (Select Count(*) from mt_foliosxtecnicos where DATE(fechacreacion) =  DATE(NOW()) and estatus = 'Queja') as quejas,".
             " (Select Count(*) from mt_foliosxtecnicos where DATE(fechacreacion) =  DATE(NOW()) and estatus = 'Retornada') as retornadas,".
-            " (Select Count(*) from mt_foliosxtecnicos where DATE(fechacreacion) =  DATE(NOW())) as Total,".
-            " p.CodigoPersonal as Expediente, ".
-            " concat('[',p.CodigoPersonal,'] ', p.Nombre, ' ', p.APaterno, ' ', p.AMaterno) as CodigoPersonal,".
-            " ft.*,".
-            " tr.*,".
-            " c.Codigo,	".
-            " TIME(ft.FechaCreacion) as Hora,		".
-            " 0 as CostoCobrar".
+            " (Select Count(*) from mt_foliosxtecnicos where DATE(fechacreacion) =  DATE(NOW())) as Total".
             " From mt_foliosxtecnicos as ft".
             " left join ".
             " mt_central as c".

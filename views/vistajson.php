@@ -15,8 +15,8 @@ class vistajson extends vistaapi{
     public function mprint( $body )
     {
         // TODO: Implement mprint() method.
-        if ( $this->state ){
-            http_response_code( $this->state );
+        if ( $this->state == 0 ){
+//            http_response_code( $this->state );
         }
         header( 'Content-Type: application/json; charset=utf8' );
         echo json_encode( $body, JSON_PRETTY_PRINT );

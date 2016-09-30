@@ -31,8 +31,8 @@ $view = new vistajson();
 
 set_exception_handler(function ( $exception ) use ($view){
     $body = array(
-        "estado"    => $exception->state,
-        "mensaje"   => $exception->getMessage()
+        "state"    => $exception->state,
+        "message"   => $exception->getMessage()
     );
 
     if ($exception->getCode()){
