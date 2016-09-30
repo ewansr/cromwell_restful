@@ -97,14 +97,18 @@ class usuarios extends master_usuarios{
                             "message" => "Logueo Exitoso",
                             self::TABLE_NAME => $respuesta];
                 } else {
-                    return ["logueo_valido" => 0, "message" => "Usuario o contraseña inválidos"];
+                    return ["logueo_valido" => 0,
+                            "message" => "Usuario o contraseña inválidos",
+                            self::TABLE_NAME => $respuesta];
                 }
             }catch (Exception $e){
                 throw new ApiExceptions(self::ESTADO_FALLA_DESCONOCIDA,
                     "Ha ocurrido un error vvv" . $e->getMessage() );
             }
         } else {
-            return ["logueo_valido" => 0, "message" => "Usuario o contraseña inválidos"];
+            return ["logueo_valido" => 0,
+                    "message" => "Usuario o contraseña inválidos",
+                    self::TABLE_NAME => $respuesta];
         }
     }
 }

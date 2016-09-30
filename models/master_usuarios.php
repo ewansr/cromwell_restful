@@ -5,7 +5,6 @@
  * Date: 26/09/2016
  * Time: 01:12 AM
  */
-
  abstract  class master_usuarios{
      const TABLE_NAME = 'master_usuarios';
      const ID = "Idusuario";
