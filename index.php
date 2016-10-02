@@ -34,7 +34,7 @@ set_exception_handler(function ( $exception ) use ($view){
         "state"    => $exception->state,
         "message"   => $exception->getMessage()
     );
-
+    http_response_code(400);
     if ($exception->getCode()){
         $view->state = $exception->getCode();
     }else{

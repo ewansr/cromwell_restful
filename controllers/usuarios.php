@@ -79,18 +79,18 @@ class usuarios extends master_usuarios{
     }
 
     private function login() {
-        $body = file_get_contents('php://input');
         $respuesta = array();
+        $body = file_get_contents('php://input');
         $usuario = json_decode($body);
         $correo     = $usuario->correo;
         $contrasena = $usuario->contrasena;
 
         if (self::autenticar($correo, $contrasena)) {
             try {
-                http_response_code(204);
                 $usuarioBD = self::obtenerUsuarioPorCorreo($correo);
                 if ($usuarioBD != NULL) {
                     http_response_code(200);
+                    header("HTTP/1.1 200 OK");
                     $respuesta[self::ID] = $usuarioBD[self::ID];
                     $respuesta[self::USUARIO] = $usuarioBD[self::USUARIO];
                     return ["state" => 200,"logueo_valido" => 1,
@@ -98,7 +98,7 @@ class usuarios extends master_usuarios{
                             "message" => "Logueo Exitoso",
                             self::TABLE_NAME => $respuesta];
                 } else {
-
+                    http_response_code(400);
                     return ["logueo_valido" => 0,
                             "message" => "Usuario o contraseña inválidos",
                             self::TABLE_NAME => $respuesta];
@@ -108,6 +108,7 @@ class usuarios extends master_usuarios{
                     "Ha ocurrido un error vvv" . $e->getMessage() );
             }
         } else {
+            http_response_code(400);
             return ["logueo_valido" => 0,
                     "message" => "Usuario o contraseña inválidos",
                     self::TABLE_NAME => $respuesta];
