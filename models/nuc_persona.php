@@ -8,7 +8,7 @@
 require "utils/conexion.php";
 
 class nuc_persona{
-    const TABLE_NAME = "nuc_persona";
+    const TABLE_NAME = "master_usuarios";
     const ID     = "Id";
     const NOMBRE = "Nombre";
     const APPAT  = "Appat";
@@ -28,10 +28,8 @@ class nuc_persona{
 
     private function getPersona()
     {
-        $SQLCommand = "SELECT " .
-            self::NOMBRE . ", " .
-            self::APPAT . ", " .
-            self::APMAT . "" .
+        $SQLCommand = "SELECT * " .
+
 
             " FROM " . self::TABLE_NAME ;
 
@@ -39,8 +37,16 @@ class nuc_persona{
 
 //        $sentence->bindParam(1, $nombre);
 
-        if (self::$sentence->execute())
-            return self::$sentence->fetch(PDO::FETCH_ASSOC);
+        if (self::$sentence->execute()){
+
+            $jsonData = array();
+            while ($array = self::$sentence->fetch(PDO::FETCH_ASSOC)) {
+                $jsonData[] = $array;
+            }
+
+            return $jsonData;
+//            return self::$sentence->fetch(PDO::FETCH_ASSOC);
+        }
         else
             return null;
     }
@@ -51,18 +57,18 @@ class nuc_persona{
         $response = array();
 
         $body = file_get_contents('php://input');
-        $usuario = json_decode($body);
+        //$usuario = json_decode($body);
         $data = self::getPersona();
 
         if ($data != NULL) {
             http_response_code(200);
             //$response["Id"]  = $data["id"];
-            $response["Nombre"] = $data["Nombre"];
-            $response["Appat"]  = $data["Appat"];
-            $response["Apmat"]  = $data["Apmat"];
+//            $response["Nombre"] = $data["Nombre"];
+//            $response["Appat"]  = $data["Appat"];
+//            $response["Apmat"]  = $data["Apmat"];
             return [
                     "Found" => true,
-                    "persona" => $response,
+                    "persona" => var_dump($data),
                     "SQL" => self::$sentence
                     ];
         } else {
