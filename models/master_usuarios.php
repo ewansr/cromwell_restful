@@ -14,9 +14,6 @@
      const USUARIO = "Usuario";
      const CONTRASENA = "contrasena";
      const CONTRASENA_DECRYPT = "pass_decrypt";
-     const IMAGENCUENTA = "ImagenCuenta";
-     const COMENTARIOS = "Comentarios";
-     const LONGITUDCONTRASENA = "LongitudContrasena";
      const EDITABLE = "Editable";
      const IDPERFIL = "IdPerfil";
      const ACTIVO = "Activo";
@@ -24,10 +21,7 @@
      const ESTADO_URL_INCORRECTA = "ERROR URL";
      const ESTADO_FALLA_DESCONOCIDA = "FALLA DESCONOCIDA";
      const ESTADO_ERROR_BD = "ERROR AL EJECUTAR LA CONSULTA EN LA BASE DE DATOS";
-     const CONSULTA_SQL =
-         "SELECT *," .
-         " AES_DECRYPT(contrasena,'AES2016') as pass_decrypt" .
-         " FROM " . self::TABLE_NAME;
+     const CONSULTA_SQL = " select *, AES_DECRYPT(contrasena,'AES2016') as pass_decrypt FROM master_usuarios";
 
 
      public function autenticar($usuario, $contrasena) {
