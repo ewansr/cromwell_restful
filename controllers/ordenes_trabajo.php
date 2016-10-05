@@ -7,13 +7,17 @@
  * Time: 02:28 AM
  */
 
-require 'models/mt_foliosxtecnicos.php';
+require 'models/model_ordenes_trabajo.php';
+
 class ordenes_trabajo extends mt_foliosxtecnicos{
     public function post($request)
     {
         if($request[0] == 'tablero'){
             return self::cargar_tablero();
-        }else{
+        }else if($request[0] == 'todas_ordenes'){
+           return self::cargar_ordenes();
+        }
+        else{
             throw new apiexceptions(self::ESTADO_URL_INCORRECTA, "URL MAL FORMADA 400");
         }
     }
