@@ -73,6 +73,7 @@
                      header("HTTP/1.1 200 OK");
                      $respuesta[self::ID] = $usuarioBD[self::ID];
                      $respuesta[self::USUARIO] = $usuarioBD[self::USUARIO];
+                     $respuesta[self::IDPERSONAL] = $usuarioBD[self::IDPERSONAL];
                      return ["state" => 200,"logueo_valido" => 1,
                          "valid" => 1,
                          "message" => "Logueo Exitoso",

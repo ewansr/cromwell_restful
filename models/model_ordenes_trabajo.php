@@ -62,10 +62,14 @@ abstract class mt_foliosxtecnicos {
 
 
     public function cargar_ordenes(){
+        $body = file_get_contents('php://input');
+        $params = json_decode($body);
+        $personal       = $params->idpersonal;
+        $inicio         = $params->inicio;
+        $termino        = $params->termino;
+
         self::$datos = conexion::obtenerInstancia()->obtenerDB()->prepare(self::CONSULTA_SQL);
-        $personal = 30;
-        $inicio = "2016-10-05";
-        $termino = "2016-10-05";
+
         self::$datos->bindParam(1, $personal);
         self::$datos->bindParam(2, $inicio);
         self::$datos->bindParam(3, $termino);
