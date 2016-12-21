@@ -16,8 +16,11 @@
  */
 
 //require 'controladores/nuc_persona.php';
+require 'controllers/controller_contratista.php';
+require 'controllers/controller_tipo_orden.php';
 require 'controllers/usuarios.php';
 require 'controllers/ordenes_trabajo.php';
+
 require 'views/vistajson.php';
 require 'utils/apiexceptions.php';
 require 'models/nuc_persona.php';
@@ -46,14 +49,13 @@ set_exception_handler(function ( $exception ) use ($view){
 // Extraer segmento de la url
 if (isset($_GET['PATH_INFO'])) {
     $request = explode('/', $_GET['PATH_INFO']);
-    //print($request[0]);
 }
 else
     throw new apiexceptions(ESTADO_URL_INCORRECTA, utf8_encode("No se reconoce la petición"));
 
 // Obtener recurso
 $resource = array_shift($request);
-$resource_available = array('nuc_persona', 'usuarios', 'ordenes_trabajo');
+$resource_available = array('nuc_persona', 'usuarios', 'ordenes_trabajo', 'controller_tipo_orden', 'controller_contratista');
 
 // Comprobar si existe el recurso
 if (!in_array($resource, $resource_available)) {
