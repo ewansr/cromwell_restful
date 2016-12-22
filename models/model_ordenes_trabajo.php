@@ -37,6 +37,7 @@ abstract class mt_foliosxtecnicos {
                             tr.*,
                             cc.*,
                             (Select contratista from mt_contratistas where IdContratista = ft.IdContratista) as sContratista,
+                            @curRow := @curRow + 1 AS row_number,
                       
                         DATE_ADD(FechaCreacion, INTERVAL 1 HOUR) as editablehasta,
                         If(now() <= DATE_ADD(FechaCreacion, INTERVAL 1 HOUR), 'Si', 'NO') as editable,
@@ -44,6 +45,9 @@ abstract class mt_foliosxtecnicos {
                              if(DATE(NOW()) <= DATE(DATE_ADD(FechaCreacion,INTERVAL 1 MONTH)),CONCAT('GARANTIA QUEDAN ', DATEDIFF(date(NOW()),DATE(DATE_ADD(FechaCreacion,INTERVAL 1 MONTH))), ' DIAS'),'SIN GARANTIA') as EstatusGarantia,
                             If(ft.estatus = 'Liquidada' ,IFNULL(if(c.Ubicacion = 'Local', cc.PagoTecnicoLocal, if(c.Ubicacion = 'Foraneo',cc.PagoTecnicoForaneo, 0)),0), 0) as Costo
                         From mt_foliosxtecnicos as ft
+                        
+                       
+                        
                             left join
                           mt_tipoorden as tr on (tr.idTipo=ft.IdTipo)
 
@@ -55,6 +59,7 @@ abstract class mt_foliosxtecnicos {
                               mt_costos as cc
                             on (cc.IdTipoOrden = ft.IdTipo and cc.Vigencia = (Select max(vigencia) from mt_costos where IdTipoOrden = ft.IdTipo and vigencia <= ft.FechaCreacion))
 
+                            JOIN    (SELECT @curRow := 0) r;
                         where
                           ft.IdPersonal = ? and
                           DATE(ft.fechacreacion) BETWEEN DATE(?) and DATE(?)  group by ft.IdFolio";

@@ -140,27 +140,66 @@ class ordenes_trabajo extends mt_foliosxtecnicos{
                               'Pendiente'
                               )";
         try{
-            $sentencia = conexion::obtenerInstancia()->obtenerDB()->prepare($comando);
-            $sentencia->bindParam(1,$folio);
-            $sentencia->bindParam(2,$foliotelmex);
-            $sentencia->bindParam(3,$idpersonal);
-            $sentencia->bindParam(4,$telefono);
-            $sentencia->bindParam(5,$principal);
-            $sentencia->bindParam(6,$secundario);
-            $sentencia->bindParam(7,$tipoos);
-            $sentencia->bindParam(8,$distrio);
-            $sentencia->bindParam(9,$central);
-            $sentencia->bindParam(10,$comentarios);
-            $sentencia->bindParam(11,$estatus);
-            $sentencia->bindParam(12,$idtipo);
-            $sentencia->bindParam(13,$terminal);
-            $sentencia->bindParam(14,$puerto);
-            $sentencia->bindParam(15,$idcontratista);
 
+            if (self::existeFolio($folio)){
+                http_response_code(200);
+                return ["valid" => 0,
+                    "found" => 1,
+                    "message" => "La orden de trabajo que deseas registrar ya se encuentra en la base de datos"];
+            }else {
+
+                $sentencia = conexion::obtenerInstancia()->obtenerDB()->prepare($comando);
+                $sentencia->bindParam(1, $folio);
+                $sentencia->bindParam(2, $foliotelmex);
+                $sentencia->bindParam(3, $idpersonal);
+                $sentencia->bindParam(4, $telefono);
+                $sentencia->bindParam(5, $principal);
+                $sentencia->bindParam(6, $secundario);
+                $sentencia->bindParam(7, $tipoos);
+                $sentencia->bindParam(8, $distrio);
+                $sentencia->bindParam(9, $central);
+                $sentencia->bindParam(10, $comentarios);
+                $sentencia->bindParam(11, $estatus);
+                $sentencia->bindParam(12, $idtipo);
+                $sentencia->bindParam(13, $terminal);
+                $sentencia->bindParam(14, $puerto);
+                $sentencia->bindParam(15, $idcontratista);
+
+
+                if ($sentencia->execute()) {
+                    http_response_code(200);
+                    return ["valid" => 1,
+                        "found" => 1,
+                        "message" => "Órden de Trabajo registrada exitosamente."];
+                } else {
+                    http_response_code(200);
+                    return ["valid" => 0,
+                        "found" => 0,
+                        "message" => "Error al registrar la órden de trabajo. Intente nuevamente."];
+                }
+            }
+        } catch (PDOException $e) {
+            throw new apiexceptions(self::ESTADO_ERROR_BD, $e->getMessage());
+        }
+    }
+
+    public function existeFolio($folio_check){
+        $comando ="Select folio from mt_foliosxtecnicos where folio = ?";
+        try{
+            $sentencia = conexion::obtenerInstancia()->obtenerDB()->prepare($comando);
+            $sentencia->bindParam(1,$folio_check);
 
             if ($sentencia->execute()){
-                http_response_code(200);
+                $registros = $sentencia->fetch(PDO::FETCH_ASSOC);
+                if ($registros != NULL) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
             }
+
         } catch (PDOException $e) {
             throw new apiexceptions(self::ESTADO_ERROR_BD, $e->getMessage());
         }

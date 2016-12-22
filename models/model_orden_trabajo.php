@@ -7,7 +7,7 @@
  * Time: 02:21 AM
  */
 
-abstract class model_contratista {
+abstract class model_orden_trabajo {
     const TABLE_NAME = 'mt_foliosxtecnicos';
     const ID = "IdFolio";
     const ESTADO_URL_INCORRECTA = "ERROR URL";

@@ -21,7 +21,7 @@
      const ESTADO_URL_INCORRECTA = "ERROR URL";
      const ESTADO_FALLA_DESCONOCIDA = "FALLA DESCONOCIDA";
      const ESTADO_ERROR_BD = "ERROR AL EJECUTAR LA CONSULTA EN LA BASE DE DATOS";
-     const CONSULTA_SQL = " select *, AES_DECRYPT(contrasena,'AES2016') as pass_decrypt FROM master_usuarios";
+     const CONSULTA_SQL = " select *, (Select FolioTelmex From master_personal where idPersonal = master_usuarios.IdPersonal)as FolioTelmex, (Select concat(Nombre,' ', APaterno,' ', AMaterno) From master_personal where idPersonal = master_usuarios.IdPersonal)as NombreCompleto,AES_DECRYPT(contrasena,'AES2016') as pass_decrypt FROM master_usuarios";
 
 
      public function autenticar($usuario, $contrasena) {
@@ -74,6 +74,9 @@
                      $respuesta[self::ID] = $usuarioBD[self::ID];
                      $respuesta[self::USUARIO] = $usuarioBD[self::USUARIO];
                      $respuesta[self::IDPERSONAL] = $usuarioBD[self::IDPERSONAL];
+                     $respuesta["NombreCompleto"] = $usuarioBD["NombreCompleto"];
+                     $respuesta["FolioTelmex"] = $usuarioBD["FolioTelmex"];
+
                      return ["state" => 200,"logueo_valido" => 1,
                          "valid" => 1,
                          "message" => "Logueo Exitoso",
