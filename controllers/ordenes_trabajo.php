@@ -16,6 +16,8 @@ class ordenes_trabajo extends mt_foliosxtecnicos{
             return self::cargar_tablero();
         }else if($request[0] == 'todas_ordenes'){
            return self::cargar_ordenes();
+        }else if($request[0] == 'guardar_orden'){
+           return self::guardar_orden();
         }
         else{
             throw new apiexceptions(self::ESTADO_URL_INCORRECTA, "URL MAL FORMADA 400");
@@ -69,6 +71,95 @@ class ordenes_trabajo extends mt_foliosxtecnicos{
                             "message" => "Registros cargado exitosamente",
                             self::TABLE_NAME => $registros];
                 }
+            }
+        } catch (PDOException $e) {
+            throw new apiexceptions(self::ESTADO_ERROR_BD, $e->getMessage());
+        }
+    }
+
+    public function guardar_orden(){
+        $body     = file_get_contents('php://input');
+        $params   = json_decode($body);
+        $folio = $params->folio;
+        $foliotelmex = $params->foliotelmex;
+        $idpersonal = $params->idpersonal;
+        $telefono = $params->telefono;
+        $principal = $params->principal;
+        $secundario = $params->secundario;
+        $tipoos = $params->tipoos;
+        $distrio = $params->distrito;
+        $central = $params->central;
+        $comentarios = $params->comentarios;
+        $estatus = $params->estatus;
+        $idtipo = $params->idtipo;
+        $terminal = $params->terminal;
+        $puerto = $params->puerto;
+        $idcontratista = $params->idcontratista;
+
+
+        $comando ="INSERT INTO 
+                            mt_foliosxtecnicos(
+                              IdFolio,
+                              Folio,
+                              FolioTelmex,
+                              IdPersonal,
+                              Telefono,
+                              Principal,
+                              Secundario,
+                              TipoOS,
+                              Distrito,
+                              Central,
+                              Comentarios,
+                              FechaCreacion,
+                              Estatus,
+                              ImgIndex,
+                              IdTipo,
+                              Terminal,
+                              Puerto,
+                              IdContratista,
+                              EstatusCobro)
+                            VALUES
+                              (0,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              now(),
+                              ?,
+                              0,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              'Pendiente'
+                              )";
+        try{
+            $sentencia = conexion::obtenerInstancia()->obtenerDB()->prepare($comando);
+            $sentencia->bindParam(1,$folio);
+            $sentencia->bindParam(2,$foliotelmex);
+            $sentencia->bindParam(3,$idpersonal);
+            $sentencia->bindParam(4,$telefono);
+            $sentencia->bindParam(5,$principal);
+            $sentencia->bindParam(6,$secundario);
+            $sentencia->bindParam(7,$tipoos);
+            $sentencia->bindParam(8,$distrio);
+            $sentencia->bindParam(9,$central);
+            $sentencia->bindParam(10,$comentarios);
+            $sentencia->bindParam(11,$estatus);
+            $sentencia->bindParam(12,$idtipo);
+            $sentencia->bindParam(13,$terminal);
+            $sentencia->bindParam(14,$puerto);
+            $sentencia->bindParam(15,$idcontratista);
+
+
+            if ($sentencia->execute()){
+                http_response_code(200);
             }
         } catch (PDOException $e) {
             throw new apiexceptions(self::ESTADO_ERROR_BD, $e->getMessage());
